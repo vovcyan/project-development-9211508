@@ -1,0 +1,15 @@
+{
+  "name": "project-development-9211508",
+  "version": "1.0.0",
+  "description": "This repository is create to store tasks related to project development course in university",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --env-file=.env src/index.js"
+  },
+  "author": "Vladimir Fedin",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "morgan": "^1.10.0"
+  }
+}
