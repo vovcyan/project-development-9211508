@@ -4,12 +4,27 @@
   "description": "This repository is create to store tasks related to project development course in university",
   "main": "index.js",
   "scripts": {
-    "start": "node --env-file=.env src/index.js"
+    "start": "node --env-file=.env server/index.js",
+    "build": "webpack --mode=development",
+    "dev": "npm run build && npm start"
   },
   "author": "Vladimir Fedin",
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router": "^6.28.0",
+    "react-router-dom": "^6.28.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.25.9",
+    "babel-loader": "^9.2.1",
+    "html-webpack-plugin": "^5.6.3",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
   }
 }
