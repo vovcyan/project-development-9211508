@@ -10,7 +10,11 @@ const port = 8080;
 app.use(logger());
 app.use(apiRouter);
 
-app.use(express.static(path.resolve(__dirname, '..', 'dist')));
+app.use(express.static(path.resolve(__dirname, '../dist')));
+
+app.get('*', (_, res) => {
+  res.sendFile(path.resolve(__dirname, '../dist/index.html'));
+});
 
 app.listen(port, () => {
   console.log(`Application listening on port ${port}`);
