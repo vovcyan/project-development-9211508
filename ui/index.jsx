@@ -3,12 +3,12 @@ import {createRoot} from 'react-dom/client';
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
-  Link,
 } from 'react-router-dom';
 
 import {ListPage} from './pages/List/ListPage.jsx';
 import {DetailsPage} from './pages/Details/DetailsPage.jsx';
+
+import './styles.css';
 
 const router = createBrowserRouter([
     {
