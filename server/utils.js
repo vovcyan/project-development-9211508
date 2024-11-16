@@ -6,6 +6,15 @@ function getAppId() {
     return process.env.APP_ID;
 }
 
+function getMapApiKey() {
+    if (!process.env.MAP_API_KEY) {
+        throw new Error('Map API key must be provided as \'MAP_API_KEY\' in env');
+    }
+
+    return process.env.MAP_API_KEY;
+}
+
 module.exports = {
     getAppId,
+    getMapApiKey,
 }

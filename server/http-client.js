@@ -34,10 +34,11 @@ class HttpClient {
         return res.json();
     }
 
-    async fetchWeatherByCityId(cityId) {
+    async fetchWeatherByCityId(id) {
         const url = this._prepareUrl('/weather', {
-            q: cityId,
+            id,
             appid,
+            units: 'metric',
         });
 
         const res = await fetch(url);
