@@ -6,7 +6,7 @@ const {getMapApiKey} = require('./utils');
 const router = express.Router();
 
 router.get('/api/list', async (_, res) => {
-    const cities = [792680, 2643743, 2950159];
+    const cities = [792680, 2643743, 2950159, 2988507];
     const responses = await Promise.all(cities.map((city) => httpClient.fetchWeatherByCityId(city)));
 
     res.status(200).json({cities: responses});
@@ -70,11 +70,21 @@ router.get('/api/suggest', async (req, res) => {
     }
 
     try {
+        const uniqueCities = new Map();
+
         console.log(`[API_SUGGEST]: Trying to find city by query - ${city}`);
         const response = await httpClient.findCityByQuery(city);
         console.log(`[API_SUGGEST]: Successfully received response`);
 
-        res.status(200).json({list: response.list || []});
+        (response.list || []).forEach((item) => {
+            const id = `${item.name},${item.sys.country}`;
+
+            if (!uniqueCities.has(id)) {
+                uniqueCities.set(id, item);
+            }
+        });
+
+        res.status(200).json({list: Array.from(uniqueCities.values())});
     } catch (error) {
         console.error('[API_SUGGEST]: Error to fetch data');
         res.status(500).json({code: 'ERROR_CITY_SUGGEST'});
