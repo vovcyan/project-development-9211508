@@ -1,4 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {
     Card,
     CardBody,
@@ -11,6 +12,7 @@ import {
 } from '@nextui-org/react';
 
 import {NewCityModal} from './Modal/NewCityModal.jsx';
+import {getSavedCities, addSavedCity} from '../../utils.js';
 
 function getCityMapImageUrl(city) {
     const params = new URLSearchParams({
@@ -22,8 +24,10 @@ function getCityMapImageUrl(city) {
 }
 
 export function ListPage() {
+    const [selectedCities, setSelectedCities] = useState(getSavedCities());
     const [isLoading, setIsLoading] = useState(true);
     const [cityData, setCityData] = useState([]);
+    const navigate = useNavigate();
 
     const {
         isOpen: isModalOpen,
@@ -32,16 +36,28 @@ export function ListPage() {
     } = useDisclosure();
 
     const fetchListPageData = useCallback(async () => {
-        const response = await fetch('/api/list');
+        const params = new URLSearchParams();
+        selectedCities.forEach((cityId) => params.append('city', cityId));
+
+        const response = await fetch(`/api/list?${params.toString()}`);
         const {cities} = await response.json();
 
         setCityData(cities);
         setIsLoading(false);
+    }, [selectedCities]);
+
+    const onNewCity = useCallback((cityId) => {
+        addSavedCity(cityId);
+        setSelectedCities(getSavedCities());
+    }, []);
+
+    const handleCardClick = useCallback((item) => {        
+        navigate(`/details?city=${item.id}`);
     }, []);
 
     useEffect(() => {
         fetchListPageData();
-    }, []);
+    }, [fetchListPageData]);
 
     if (isLoading) {
         return (
@@ -67,7 +83,7 @@ export function ListPage() {
 
             <div className="w-full gap-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 md:gap-4">
                 {cityData.map((item, index) => (
-                    <Card shadow="sm" key={index} isPressable onPress={() => console.log("item pressed")}>
+                    <Card shadow="sm" key={index} isPressable onPress={() => handleCardClick(item)}>
                         <CardBody className="overflow-visible p-0">
                             <Image
                                 shadow="sm"
@@ -91,6 +107,7 @@ export function ListPage() {
             <NewCityModal
                 isOpen={isModalOpen}
                 onOpenChange={onModalOpenChange}
+                onNewCity={onNewCity}
             />
         </div>
     );

@@ -12,7 +12,7 @@ import {
     Chip,
 } from '@nextui-org/react';
 
-export function NewCityModal({isOpen, onOpenChange}) {
+export function NewCityModal({isOpen, onOpenChange, onNewCity}) {
     const [isLoading, setIsLoading] = useState(false);
     const [suggestions, setSuggestions] = useState([]);
     const [selectedSuggestionId, setSelectedSuggestionId] = useState(null);
@@ -61,6 +61,7 @@ export function NewCityModal({isOpen, onOpenChange}) {
                                 ) : (
                                     suggestions.map((item, index) => (
                                         <Chip
+                                            className="clickable"
                                             size="md"
                                             key={index}
                                             color={selectedSuggestionId === index ? 'primary' : 'default'}
@@ -76,7 +77,10 @@ export function NewCityModal({isOpen, onOpenChange}) {
                             <Button color="danger" variant="light" onPress={onClose}>
                                 Close
                             </Button>
-                            <Button color="primary" onPress={onClose}>
+                            <Button color="primary" onPress={() => {
+                                onNewCity(suggestions[selectedSuggestionId].id);
+                                onClose();
+                            }}>
                                 Save
                             </Button>
                         </ModalFooter>
