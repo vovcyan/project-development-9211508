@@ -5,11 +5,23 @@ const {getMapApiKey} = require('./utils');
 
 const router = express.Router();
 
-router.get('/api/list', async (_, res) => {
-    const cities = [792680, 2643743, 2950159, 2988507];
-    const responses = await Promise.all(cities.map((city) => httpClient.fetchWeatherByCityId(city)));
+router.get('/api/list', async (req, res) => {
+    try {
+        const cities = Array.isArray(req.query.city) ? req.query.city : [];
 
-    res.status(200).json({cities: responses});
+        console.log(`[API_LIST]: Trying fetch weather for cities - ${cities.join(', ')}`);
+
+        const responses = await Promise.all(
+            cities.map((city) => httpClient.fetchWeatherByCityId(city))
+        );
+
+        console.log(`[API_LIST]: Successfully received response`);
+
+        res.status(200).json({cities: responses});
+    } catch (error) {
+        console.error('[API_MAPS]: Error to fetch weather for cities', error);
+        res.status(500).json({code: 'ERROR_LIST'});
+    }
 });
 
 router.get('/api/maps', async (req, res) => {
@@ -34,14 +46,14 @@ router.get('/api/maps', async (req, res) => {
         const response = await fetch(`https://maptoolkit.p.rapidapi.com/staticmap/?${searchParams.toString()}`);
         const buffer = await response.arrayBuffer();
         const imgData = new Uint8Array(buffer)
-        
+
         console.log(`[API_MAPS]: Successfully received response`);
 
         res.set('content-type', response.headers.get('content-type'));
         res.set('content-length', response.headers.get('content-length'));
         res.end(imgData, 'binary');
     } catch (error) {
-        console.error('[API_MAPS]: Error to fetch map image');
+        console.error('[API_MAPS]: Error to fetch map image', error);
         res.status(500).json({code: 'ERROR_MAP'});
     }
 });
@@ -56,7 +68,7 @@ router.get('/api/:cityId/details', async (req, res) => {
 
         res.status(200).json(response);
     } catch (error) {
-        console.error('[API_CITY_DETAILS]: Error to fetch data');
+        console.error('[API_CITY_DETAILS]: Error to fetch data', error);
         res.status(500).json({code: 'ERROR_CITY_DETAILS'});
     }
 });
@@ -86,7 +98,7 @@ router.get('/api/suggest', async (req, res) => {
 
         res.status(200).json({list: Array.from(uniqueCities.values())});
     } catch (error) {
-        console.error('[API_SUGGEST]: Error to fetch data');
+        console.error('[API_SUGGEST]: Error to fetch data', error);
         res.status(500).json({code: 'ERROR_CITY_SUGGEST'});
     }
 });
