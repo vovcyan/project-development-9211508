@@ -10,7 +10,7 @@ function Root() {
     return (
         <React.StrictMode>
             <NextUIProvider>
-                <main className="light text-foreground bg-background bg-slate-100 h-screen">
+                <main className="light text-foreground bg-background h-screen">
                     <App/>
                 </main>
             </NextUIProvider>

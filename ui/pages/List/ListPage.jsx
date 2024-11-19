@@ -12,16 +12,7 @@ import {
 } from '@nextui-org/react';
 
 import {NewCityModal} from './Modal/NewCityModal.jsx';
-import {getSavedCities, addSavedCity} from '../../utils.js';
-
-function getCityMapImageUrl(city) {
-    const params = new URLSearchParams({
-        size: '750x300',
-        center: `${city.coord.lat},${city.coord.lon}`,
-    });
-
-    return `/api/maps?${params}`;
-}
+import {getSavedCities, addSavedCity, getCityMapImageUrl} from '../../utils.js';
 
 export function ListPage() {
     const [selectedCities, setSelectedCities] = useState(getSavedCities());
@@ -69,7 +60,7 @@ export function ListPage() {
         <div className="flex flex-wrap w-full gap-4">
             <div className="flex flex-wrap w-full justify-between pt-6">
                 <div className="flex items-center">
-                    <h2 className="text-2xl md:text-xl font-medium">Temperature in the cities</h2>
+                    <h1 className="text-2xl md:text-xl font-medium">Temperature in the cities</h1>
                 </div>
                 <Button
                     className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg"
@@ -97,7 +88,7 @@ export function ListPage() {
                         <CardFooter className="text-small justify-between">
                             <b>{item.name}, {item.sys.country}</b>
                             <p className="text-default-500">
-                                {Math.round(item.main.temp_min)}° — {Math.round(item.main.temp_max)}°
+                                {Math.round(item.main.temp_min)}°C — {Math.round(item.main.temp_max)}°C
                             </p>
                         </CardFooter>
                     </Card>

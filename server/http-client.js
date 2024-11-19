@@ -44,6 +44,18 @@ class HttpClient {
         const res = await fetch(url);
         return res.json();
     }
+
+    async fetchWeatherForecastByGeo(lat, lon) {
+        const url = this._prepareUrl('/forecast', {
+            lat,
+            lon,
+            appid,
+            units: 'metric',
+        });
+
+        const res = await fetch(url);
+        return res.json();
+    }
 }
 
 module.exports = new HttpClient();

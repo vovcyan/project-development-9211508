@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const STORAGE_CITIES_DATA_LOCATOR = 'LS_CITIES_DATA_LOCATOR';
 
 const DEFAULT_STORAGE_STATE = JSON.stringify({
@@ -16,4 +18,17 @@ export function getSavedCities() {
         localStorage.getItem(STORAGE_CITIES_DATA_LOCATOR) || DEFAULT_STORAGE_STATE
     );
     return cities;
+}
+
+export function getCityMapImageUrl(city) {
+    const params = new URLSearchParams({
+        size: '750x300',
+        center: `${city.coord.lat},${city.coord.lon}`,
+    });
+
+    return `/api/maps?${params}`;
+}
+
+export function unixDateToStr(unixDate) {
+    return dayjs(unixDate).format('DD.MM.YY HH:mm');
 }

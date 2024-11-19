@@ -73,6 +73,25 @@ router.get('/api/:cityId/details', async (req, res) => {
     }
 });
 
+router.get('/api/:cityId/forecast', async (req, res) => {
+    const {cityId} = req.params;
+
+    try {
+        console.log(`[API_CITY_FORECAST]: Trying fetch weather by city id - ${cityId}`);
+        const {coord: {lat, lon}} = await httpClient.fetchWeatherByCityId(cityId);
+        console.log(`[API_CITY_FORECAST]: Successfully received response`);
+
+        console.log(`[API_CITY_FORECAST]: Trying fetch weather forecast by geo (lat, lon) - (${lat}, ${lon})`);
+        const response = await httpClient.fetchWeatherForecastByGeo(lat, lon);
+        console.log(`[API_CITY_FORECAST]: Successfully received response`);
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.error('[API_CITY_FORECAST]: Error to fetch data', error);
+        res.status(500).json({code: 'ERROR_CITY_FORECAST'});
+    }
+});
+
 router.get('/api/suggest', async (req, res) => {
     const city = (req.query.city || '').trim();
 
