@@ -10,7 +10,7 @@ const CHART_SERIES = {
     xKey: 'date',
     yKey: 'main.temp',
     tooltip: {
-        renderer: function ({ datum }) {
+        renderer: function ({datum}) {
             return {
                 content: `${datum.main.temp}°C`,
                 title: 'Temperature',
@@ -64,6 +64,29 @@ export function DetailsPage() {
         }),
     };
 
+    const definitionsListItems = [
+        {
+            label: 'Feels like',
+            value: `${currentWeatherData.main.feels_like}°C`,
+        },
+        {
+            label: 'Humidity',
+            value: `${currentWeatherData.main.humidity}%`,
+        },
+        {
+            label: 'Pressure',
+            value: `${currentWeatherData.main.pressure}hPa`,
+        },
+        {
+            label: 'Min temperature',
+            value: `${currentWeatherData.main.temp_min}°C`,
+        },
+        {
+            label: 'Max temperature',
+            value: `${currentWeatherData.main.temp_max}°C`,
+        },
+    ];
+
     return (
         <div className="flex flex-wrap flex-col w-full gap-10 pt-6">
             <div className="flex flex-wrap w-full justify-between gap-8">
@@ -82,9 +105,14 @@ export function DetailsPage() {
                             <p className="text-4xl">{Math.round(currentWeatherData.main.temp)}°C</p>
                         </div>
                     </div>
-                    <p className="text-default-500">
-                        {Math.round(currentWeatherData.main.temp_min)}°C — {Math.round(currentWeatherData.main.temp_max)}°C
-                    </p>
+
+                    {definitionsListItems.map((item) => (
+                        <div className="flex flex-wrap gap-1">
+                            <div className="text-default-500">{item.label}</div>
+                            :
+                            <div className="">{item.value}</div>
+                        </div>
+                    ))}
                 </div>
 
                 <Card className="border-none" radius="lg">
