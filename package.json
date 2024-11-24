@@ -4,9 +4,11 @@
   "description": "This repository is create to store tasks related to project development course in university",
   "main": "index.js",
   "scripts": {
-    "start": "node --env-file=.env server/index.js",
-    "build": "webpack --mode=development",
-    "dev": "npm run build && npm start"
+    "server": "node --env-file=.env server/index.js",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production",
+    "dev": "npm run build:dev && npm run server",
+    "prod": "npm run build:prod && npm run server"
   },
   "author": "Vladimir Fedin",
   "license": "ISC",
