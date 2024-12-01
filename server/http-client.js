@@ -4,6 +4,8 @@ const appid = getAppId();
 const endpoint = 'https://api.openweathermap.org/data/2.5';
 
 class HttpClient {
+
+    // Method generates OpenWeatherMap API URL with passed search params for specified path
     _prepareUrl(path, params) {
         const paramEntries = Object.entries(params);
         let searchParamsStr = '';

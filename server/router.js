@@ -5,6 +5,10 @@ const {getMapApiKey} = require('./utils');
 
 const router = express.Router();
 
+/**
+ * API handler for GET request which returns
+ * basic weather information for specified list of city ids.
+ */
 router.get('/api/list', async (req, res) => {
     try {
         const cities = Array.isArray(req.query.city) ? req.query.city : [];
@@ -24,6 +28,10 @@ router.get('/api/list', async (req, res) => {
     }
 });
 
+/**
+ * API handler for GET request which returns
+ * image preview map for specified city in binary format.
+ */
 router.get('/api/maps', async (req, res) => {
     const size = (req.query.size || '').trim();
     const center = (req.query.center || '').trim();
@@ -44,13 +52,18 @@ router.get('/api/maps', async (req, res) => {
         searchParams.append('rapidapi-key', getMapApiKey());
 
         const response = await fetch(`https://maptoolkit.p.rapidapi.com/staticmap/?${searchParams.toString()}`);
+
+        // Transform image in array buffer format to Uint8Array which express.js can use
         const buffer = await response.arrayBuffer();
         const imgData = new Uint8Array(buffer)
 
         console.log(`[API_MAPS]: Successfully received response`);
 
+        // Returns image content type and its size
         res.set('content-type', response.headers.get('content-type'));
         res.set('content-length', response.headers.get('content-length'));
+
+        // Returns image in binary form
         res.end(imgData, 'binary');
     } catch (error) {
         console.error('[API_MAPS]: Error to fetch map image', error);
@@ -58,6 +71,10 @@ router.get('/api/maps', async (req, res) => {
     }
 });
 
+/**
+ * API handler for GET request which returns
+ * detailed weather information for specified city.
+ */
 router.get('/api/:cityId/details', async (req, res) => {
     const {cityId} = req.params;
 
@@ -73,6 +90,10 @@ router.get('/api/:cityId/details', async (req, res) => {
     }
 });
 
+/**
+ * API handler for GET request which returns
+ * weather forecast for specified city.
+ */
 router.get('/api/:cityId/forecast', async (req, res) => {
     const {cityId} = req.params;
 
@@ -92,6 +113,10 @@ router.get('/api/:cityId/forecast', async (req, res) => {
     }
 });
 
+/**
+ * API handler for GET request which returns
+ * suggested city names by specified text.
+ */
 router.get('/api/suggest', async (req, res) => {
     const city = (req.query.city || '').trim();
 
